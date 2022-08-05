@@ -11,7 +11,6 @@ class Workout {
     }
 
     _setDescription() {
-    //prettier-ignore
     const months = [
         "January",
         "February",
@@ -27,7 +26,12 @@ class Workout {
         "December",
     ];
 
-    this.description = `${this.type[0].toUpperCase()}${this.type.slice(1)} on ${months[this.date.getMonth()]} ${this.date.getDate()}`;
+    this.description = `
+        ${this.type[0].toUpperCase()}
+        ${this.type.slice(1)} 
+        on ${months[this.date.getMonth()]} 
+        ${this.date.getDate()}
+    `;
     }
 
 }
@@ -109,6 +113,7 @@ class App {
     }
 
     _loadMap(position) {
+        //Show map centered on current location
         const { latitude } = position.coords;
         const { longitude } = position.coords;
 
@@ -117,12 +122,12 @@ class App {
         this.#map = L.map(`map`).setView(coords, this.#mapZoomLevel);
 
         L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        })
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'})
             .addTo(this.#map);
 
         this.#map.on(`click`, this._showForm.bind(this));
 
+        //Show markers for locally stored workouts
         this.#workouts.forEach(work => {
           this._renderWorkoutMarker(work);
         });
@@ -135,11 +140,14 @@ class App {
     }
 
     _hideForm() {
+        //Reset form values to ``
         inputDistance.value =
           inputDuration.value =
           inputCadence.value =
           inputElevation.value =
             ``;
+
+        //Hide form & remove from grid display
         form.style.display = `none`;
         form.classList.add(`hidden`);
         setTimeout(() => form.style.display = `grid`, 1000);
@@ -285,11 +293,11 @@ class App {
         const workout = this.#workouts.find(work => work.id === workoutElement.dataset.id);
         
         this.#map.setView(workout.coords, this.#mapZoomLevel, {
-        animate: true,
-        pan: {
-            duration: 1,
-        }
-    });
+            animate: true,
+            pan: {
+                duration: 1,
+            }
+        });
     }
 
     _setLocalStorage() {
@@ -305,6 +313,7 @@ class App {
         this.#workouts.forEach(work => {
             this._renderWorkout(work);
         });
+        //Will not return objects as Running/Cycling, merely generic objects;
     }
 
     reset() {
